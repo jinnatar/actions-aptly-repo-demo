@@ -23,7 +23,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Create repo
-        uses: jinnatar/action-aptly-repo@main
+        uses: jinnatar/actions-aptly-repo@main
         with:
           repository: "${{ matrix.repo.name }}"
           archs: "${{ matrix.repo.archs }}"
