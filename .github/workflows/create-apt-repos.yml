@@ -1,0 +1,29 @@
+---
+name: "Create apt repos"
+
+"on":
+  push:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  create-adhoc-repo:
+    name: Create adhoc repos
+    strategy:
+      matrix:
+        repo:
+          - name: ubuntu
+            archs: amd64,arm64
+          - name: debian
+            archs: amd64,arm64
+      fail-fast: false
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Create repo
+        uses: jinnatar/action-aptly-repo@latest
+        with:
+          repository: "${{ matrix.repo.name }}"
+          archs: "${{ matrix.repo.archs }}"
