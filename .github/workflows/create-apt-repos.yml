@@ -26,5 +26,7 @@ jobs:
         uses: jinnatar/actions-aptly-repo@main
         with:
           repository: "${{ matrix.repo.name }}"
+          distribution: "${{ matrix.repo.name }}"
           archs: "${{ matrix.repo.archs }}"
           glob: "debs/${{ matrix.repo.name }}/"
+          component: dev
