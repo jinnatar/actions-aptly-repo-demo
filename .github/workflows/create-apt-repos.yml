@@ -27,3 +27,4 @@ jobs:
         with:
           repository: "${{ matrix.repo.name }}"
           archs: "${{ matrix.repo.archs }}"
+          glob: "debs/${{ matrix.repo.name }}/"
