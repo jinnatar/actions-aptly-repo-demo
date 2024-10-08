@@ -17,6 +17,7 @@ jobs:
       - name: Create repo
         uses: jinnatar/actions-aptly-repo@main
         with:
+          name: kanidm-demo
           repos: |
             # repo; category ; arch,list ; deb glob
             noble;stable;amd64,arm64;debs/stable-ubuntu-24.04-*-unknown-linux-gnu/*.deb
