@@ -12,11 +12,16 @@ jobs:
     name: Create adhoc repos
     strategy:
       matrix:
-        repo:
+        prefix:
           - name: ubuntu
-            archs: amd64,arm64
+            repos: |
+              noble;stable;amd64,arm64;debs/stable-ubuntu-24.04-*-unknown-linux-gnu/*.deb
+              jammy;stable;amd64,arm64;debs/stable-ubuntu-22.04-*-unknown-linux-gnu/*.deb
+              noble;nightly;amd64,arm64;debs/nightly-ubuntu-24.04-*-unknown-linux-gnu/*.deb
           - name: debian
-            archs: amd64,arm64
+            repos: |
+              bookworm;stable;amd64,arm64;debs/stable-debian-12-*-unknown-linux-gnu/*.deb
+              bookworm;nightly;amd64,arm64;debs/nightly-debian-12-*-unknown-linux-gnu/*.deb
       fail-fast: false
     runs-on: ubuntu-24.04
     steps:
@@ -26,12 +31,7 @@ jobs:
         uses: jinnatar/actions-aptly-repo@main
         with:
           name: kanidm-demo
-          repos: |
-            # repo; category ; arch,list ; deb glob
-            noble;stable;amd64,arm64;debs/stable-ubuntu-24.04-*-unknown-linux-gnu/*.deb
-            jammy;stable;amd64,arm64;debs/stable-ubuntu-22.04-*-unknown-linux-gnu/*.deb
-            bookworm;stable;amd64,arm64;debs/stable-debian-12-*-unknown-linux-gnu/*.deb
-            noble;nightly;amd64,arm64;debs/nightly-ubuntu-24.04-*-unknown-linux-gnu/*.deb
-            bookworm;nightly;amd64,arm64;debs/nightly-debian-12-*-unknown-linux-gnu/*.deb
+          prefix: "${{ matrix.prefix.name }}"
+          repos: "${{ matrix.prefix.repos }}"
           gpg_private_key: "${{ secrets.GPG_PRIVATE_KEY }}"
           gpg_passphrase: "${{ secrets.PASSPHRASE }}"
