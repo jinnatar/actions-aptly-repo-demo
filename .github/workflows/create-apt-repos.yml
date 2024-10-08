@@ -25,10 +25,12 @@ jobs:
       - name: Create repo
         uses: jinnatar/actions-aptly-repo@main
         with:
-          repository: "${{ matrix.repo.name }}"
-          distribution: "${{ matrix.repo.name }}"
-          archs: "${{ matrix.repo.archs }}"
-          glob: "debs/${{ matrix.repo.name }}/"
-          component: dev
+          repos: |
+            # repo; category ; arch,list ; deb glob
+            noble;stable;amd64,arm64;debs/stable-ubuntu-24.04-*-unknown-linux-gnu/*.deb
+            jammy;stable;amd64,arm64;debs/stable-ubuntu-22.04-*-unknown-linux-gnu/*.deb
+            bookworm;stable;amd64,arm64;debs/stable-debian-12-*-unknown-linux-gnu/*.deb
+            noble;nightly;amd64,arm64;debs/nightly-ubuntu-24.04-*-unknown-linux-gnu/*.deb
+            bookworm;nightly;amd64,arm64;debs/nightly-debian-12-*-unknown-linux-gnu/*.deb
           gpg_private_key: "${{ secrets.GPG_PRIVATE_KEY }}"
           passphrase: "${{ secrets.PASSPHRASE }}"
