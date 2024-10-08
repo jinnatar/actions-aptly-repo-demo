@@ -10,6 +10,14 @@ concurrency:
 jobs:
   create-adhoc-repo:
     name: Create adhoc repos
+    strategy:
+      matrix:
+        repo:
+          - name: ubuntu
+            archs: amd64,arm64
+          - name: debian
+            archs: amd64,arm64
+      fail-fast: false
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout
