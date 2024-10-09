@@ -7,9 +7,29 @@ name: "Create apt repos"
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
+
 jobs:
-  create-demo-repo:
-    name: Create adhoc repos
+  create-combined-demo-repo:
+    name: Create combined demo repo
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Create repo
+        uses: jinnatar/actions-aptly-repo@main
+        with:
+          name: demo
+          repos: |
+              noble,stable,\"amd64,arm64\",debs/stable-ubuntu-24.04-*-unknown-linux-gnu/*.deb
+              jammy,stable,\"amd64,arm64\",debs/stable-ubuntu-22.04-*-unknown-linux-gnu/*.deb
+              noble,nightly,\"amd64,arm64\",debs/nightly-ubuntu-24.04-*-unknown-linux-gnu/*.deb
+              bookworm,stable,\"amd64,arm64\",debs/stable-debian-12-*-unknown-linux-gnu/*.deb
+              bookworm,nightly,\"amd64,arm64\",debs/nightly-debian-12-*-unknown-linux-gnu/*.deb
+          gpg_private_key: "${{ secrets.GPG_PRIVATE_KEY }}"
+          gpg_passphrase: "${{ secrets.PASSPHRASE }}"
+
+  create-split-demo-repo:
+    name: Create split demo repo
     strategy:
       matrix:
         prefix:
