@@ -8,20 +8,20 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 jobs:
-  create-adhoc-repo:
+  create-demo-repo:
     name: Create adhoc repos
     strategy:
       matrix:
         prefix:
           - name: ubuntu
             repos: |
-              noble;stable;amd64,arm64;debs/stable-ubuntu-24.04-*-unknown-linux-gnu/*.deb
-              jammy;stable;amd64,arm64;debs/stable-ubuntu-22.04-*-unknown-linux-gnu/*.deb
-              noble;nightly;amd64,arm64;debs/nightly-ubuntu-24.04-*-unknown-linux-gnu/*.deb
+              noble,stable,"amd64,arm64",debs/stable-ubuntu-24.04-*-unknown-linux-gnu/*.deb
+              jammy,stable,"amd64,arm64",debs/stable-ubuntu-22.04-*-unknown-linux-gnu/*.deb
+              noble,nightly,"amd64,arm64",debs/nightly-ubuntu-24.04-*-unknown-linux-gnu/*.deb
           - name: debian
             repos: |
-              bookworm;stable;amd64,arm64;debs/stable-debian-12-*-unknown-linux-gnu/*.deb
-              bookworm;nightly;amd64,arm64;debs/nightly-debian-12-*-unknown-linux-gnu/*.deb
+              bookworm,stable,"amd64,arm64",debs/stable-debian-12-*-unknown-linux-gnu/*.deb
+              bookworm,nightly,"amd64,arm64",debs/nightly-debian-12-*-unknown-linux-gnu/*.deb
       fail-fast: false
     runs-on: ubuntu-24.04
     steps:
