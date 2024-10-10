@@ -9,6 +9,36 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  create-unsigned-repo:
+    name: Create an unsigned dev repo on purpose
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Create repo
+        uses: jinnatar/actions-aptly-repo@unsigned-repos
+        with:
+          name: demo
+          repos: |
+              noble,stable,\"amd64,arm64\",debs/stable-ubuntu-24.04-*-unknown-linux-gnu/*.deb
+              bookworm,stable,\"amd64,arm64\",debs/stable-debian-12-*-unknown-linux-gnu/*.deb
+          gpg_private_key: "${{ secrets.GPG_PRIVATE_KEY }}"
+          gpg_passphrase: "${{ secrets.PASSPHRASE }}"
+  create-unsigned-accident:
+    name: Create an unsigned dev repo by mistake
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Create repo
+        uses: jinnatar/actions-aptly-repo@unsigned-repos
+        with:
+          name: demo
+          repos: |
+              noble,stable,\"amd64,arm64\",debs/stable-ubuntu-24.04-*-unknown-linux-gnu/*.deb
+              bookworm,stable,\"amd64,arm64\",debs/stable-debian-12-*-unknown-linux-gnu/*.deb
+          gpg_private_key: "${{ secrets.GPG_PRIVATE_KEYTYPO }}"
+          gpg_passphrase: "${{ secrets.PASSPHRASETYPO }}"
   create-combined-demo-repo:
     name: Create combined demo repo
     runs-on: ubuntu-24.04
@@ -16,7 +46,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Create repo
-        uses: jinnatar/actions-aptly-repo@main
+        uses: jinnatar/actions-aptly-repo@v1
         with:
           name: demo
           repos: |
@@ -48,7 +78,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Create repo
-        uses: jinnatar/actions-aptly-repo@main
+        uses: jinnatar/actions-aptly-repo@v1
         with:
           name: kanidm-demo
           prefix: "${{ matrix.prefix.name }}"
