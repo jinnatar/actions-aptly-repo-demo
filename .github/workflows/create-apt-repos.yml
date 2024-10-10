@@ -16,9 +16,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Create repo
-        uses: jinnatar/actions-aptly-repo@unsigned-repos
+        uses: jinnatar/actions-aptly-repo@artifact-naming
         with:
           name: demo
+          artifact_name: unsigned-repo
           repos: |
               noble,stable,\"amd64,arm64\",debs/stable-ubuntu-24.04-*-unknown-linux-gnu/*.deb
               bookworm,stable,\"amd64,arm64\",debs/stable-debian-12-*-unknown-linux-gnu/*.deb
@@ -29,9 +30,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Create repo
-        uses: jinnatar/actions-aptly-repo@unsigned-repos
+        uses: jinnatar/actions-aptly-repo@artifact-naming
         with:
           name: demo
+          artifact_name: accidental-repo
           repos: |
               noble,stable,\"amd64,arm64\",debs/stable-ubuntu-24.04-*-unknown-linux-gnu/*.deb
               bookworm,stable,\"amd64,arm64\",debs/stable-debian-12-*-unknown-linux-gnu/*.deb
@@ -44,9 +46,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Create repo
-        uses: jinnatar/actions-aptly-repo@v1
+        uses: jinnatar/actions-aptly-repo@artifact-naming
         with:
           name: demo
+          artifact_name: combo-repo
           repos: |
               noble,stable,\"amd64,arm64\",debs/stable-ubuntu-24.04-*-unknown-linux-gnu/*.deb
               jammy,stable,\"amd64,arm64\",debs/stable-ubuntu-22.04-*-unknown-linux-gnu/*.deb
