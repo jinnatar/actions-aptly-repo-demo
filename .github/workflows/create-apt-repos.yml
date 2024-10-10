@@ -22,8 +22,6 @@ jobs:
           repos: |
               noble,stable,\"amd64,arm64\",debs/stable-ubuntu-24.04-*-unknown-linux-gnu/*.deb
               bookworm,stable,\"amd64,arm64\",debs/stable-debian-12-*-unknown-linux-gnu/*.deb
-          gpg_private_key: "${{ secrets.GPG_PRIVATE_KEY }}"
-          gpg_passphrase: "${{ secrets.PASSPHRASE }}"
   create-unsigned-accident:
     name: Create an unsigned dev repo by mistake
     runs-on: ubuntu-24.04
