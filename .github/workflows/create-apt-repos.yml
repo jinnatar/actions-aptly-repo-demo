@@ -16,10 +16,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Create repo
-        uses: jinnatar/actions-aptly-repo@artifact-naming
+        uses: jinnatar/actions-aptly-repo@produce_apt_list
         with:
           name: demo
           artifact_name: unsigned-repo
+          repo_url: https://repo.example.com
           repos: |
               noble,stable,\"amd64,arm64\",debs/stable-ubuntu-24.04-*-unknown-linux-gnu/*.deb
               bookworm,stable,\"amd64,arm64\",debs/stable-debian-12-*-unknown-linux-gnu/*.deb
@@ -30,7 +31,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Create repo
-        uses: jinnatar/actions-aptly-repo@artifact-naming
+        uses: jinnatar/actions-aptly-repo@v1
         with:
           name: demo
           artifact_name: accidental-repo
@@ -46,7 +47,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Create repo
-        uses: jinnatar/actions-aptly-repo@artifact-naming
+        uses: jinnatar/actions-aptly-repo@v1
         with:
           name: demo
           artifact_name: combo-repo
