@@ -87,3 +87,36 @@ jobs:
           repos: "${{ matrix.prefix.repos }}"
           gpg_private_key: "${{ secrets.GPG_PRIVATE_KEY }}"
           gpg_passphrase: "${{ secrets.PASSPHRASE }}"
+  extend-demo-repo:
+    name: Extend an existing repo
+    strategy:
+      matrix:
+        prefix:
+          - name: ubuntu
+            repos: |
+              noble,stable,\"amd64,arm64\",true,debs/stable-ubuntu-24.04-*-unknown-linux-gnu/*.deb
+              jammy,stable,\"amd64,arm64\",true,debs/stable-ubuntu-22.04-*-unknown-linux-gnu/*.deb
+              noble,nightly,\"amd64,arm64\",false,debs/nightly-ubuntu-24.04-*-unknown-linux-gnu/*.deb
+          - name: debian
+            repos: |
+              bookworm,stable,\"amd64,arm64\",true,debs/stable-debian-12-*-unknown-linux-gnu/*.deb
+              bookworm,nightly,\"amd64,arm64\",false,debs/nightly-debian-12-*-unknown-linux-gnu/*.deb
+      fail-fast: false
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Read import GPG key
+        id: get_import_key
+        run: echo "::set-output name=gpg_public_key::$(cat kanidm_ppa.key)"
+      - name: Create repo
+        uses: jinnatar/actions-aptly-repo@merge_extend
+        with:
+          name: kanidm-demo
+          repo_url: https://s3.nocturnal.fi/kanidm
+          prefix: "${{ matrix.prefix.name }}"
+          repos: "${{ matrix.prefix.repos }}"
+          gpg_private_key: "${{ secrets.GPG_PRIVATE_KEY }}"
+          gpg_passphrase: "${{ secrets.PASSPHRASE }}"
+          # Only needed in development mode when the import key does not match our demo signing key.
+          import_gpg_key: ${{ steps.get_import_key.outputs.gpg_public_key }}
