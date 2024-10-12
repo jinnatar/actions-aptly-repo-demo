@@ -142,7 +142,7 @@ jobs:
     name: Create key export demos
     strategy:
       matrix:
-        gpg_export_name: ["repo.asc", "repo.gpg", ""]
+        gpg_export_name: ['repo.asc', 'repo.gpg', '']
       fail-fast: false
     runs-on: ubuntu-24.04
     steps:
