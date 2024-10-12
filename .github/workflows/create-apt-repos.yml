@@ -106,9 +106,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        # Only needed in development mode when the import key does not match our demo signing key.
       - name: Read import GPG key
         id: get_import_key
-        run: echo "::set-output name=gpg_public_key::$(cat kanidm_ppa.key)"
+        run: |
+          echo 'gpg_public_key<<EOF' >> $GITHUB_OUTPUT
+          cat kanidm_ppa.key >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
       - name: Create repo
         uses: jinnatar/actions-aptly-repo@merge_extend
         with:
@@ -118,5 +122,4 @@ jobs:
           repos: "${{ matrix.prefix.repos }}"
           gpg_private_key: "${{ secrets.GPG_PRIVATE_KEY }}"
           gpg_passphrase: "${{ secrets.PASSPHRASE }}"
-          # Only needed in development mode when the import key does not match our demo signing key.
-          import_gpg_key: ${{ steps.get_import_key.outputs.gpg_public_key }}
+          import_gpg_key: "${{ steps.get_import_key.outputs.gpg_public_key }}"
