@@ -16,14 +16,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Create repo
-        uses: jinnatar/actions-aptly-repo@produce_apt_list
+        uses: jinnatar/actions-aptly-repo@v2
         with:
           name: demo
           artifact_name: unsigned-repo
           repo_url: https://repo.example.com
           repos: |
-              noble,stable,\"amd64,arm64\",debs/stable-ubuntu-24.04-*-unknown-linux-gnu/*.deb
-              bookworm,stable,\"amd64,arm64\",debs/stable-debian-12-*-unknown-linux-gnu/*.deb
+              noble,stable,\"amd64,arm64\",false,debs/stable-ubuntu-24.04-*-unknown-linux-gnu/*.deb
+              bookworm,stable,\"amd64,arm64\",false,debs/stable-debian-12-*-unknown-linux-gnu/*.deb
   create-unsigned-accident:
     name: Create an unsigned dev repo by mistake
     runs-on: ubuntu-24.04
@@ -31,13 +31,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Create repo
-        uses: jinnatar/actions-aptly-repo@v1
+        uses: jinnatar/actions-aptly-repo@v2
         with:
           name: demo
           artifact_name: accidental-repo
           repos: |
-              noble,stable,\"amd64,arm64\",debs/stable-ubuntu-24.04-*-unknown-linux-gnu/*.deb
-              bookworm,stable,\"amd64,arm64\",debs/stable-debian-12-*-unknown-linux-gnu/*.deb
+              noble,stable,\"amd64,arm64\",false,debs/stable-ubuntu-24.04-*-unknown-linux-gnu/*.deb
+              bookworm,stable,\"amd64,arm64\",false,debs/stable-debian-12-*-unknown-linux-gnu/*.deb
           gpg_private_key: "${{ secrets.GPG_PRIVATE_KEYTYPO }}"
           gpg_passphrase: "${{ secrets.PASSPHRASETYPO }}"
   create-combined-demo-repo:
@@ -47,16 +47,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Create repo
-        uses: jinnatar/actions-aptly-repo@v1
+        uses: jinnatar/actions-aptly-repo@v2
         with:
           name: demo
           artifact_name: combo-repo
           repos: |
-              noble,stable,\"amd64,arm64\",debs/stable-ubuntu-24.04-*-unknown-linux-gnu/*.deb
-              jammy,stable,\"amd64,arm64\",debs/stable-ubuntu-22.04-*-unknown-linux-gnu/*.deb
-              noble,nightly,\"amd64,arm64\",debs/nightly-ubuntu-24.04-*-unknown-linux-gnu/*.deb
-              bookworm,stable,\"amd64,arm64\",debs/stable-debian-12-*-unknown-linux-gnu/*.deb
-              bookworm,nightly,\"amd64,arm64\",debs/nightly-debian-12-*-unknown-linux-gnu/*.deb
+              noble,stable,\"amd64,arm64\",false,debs/stable-ubuntu-24.04-*-unknown-linux-gnu/*.deb
+              jammy,stable,\"amd64,arm64\",false,debs/stable-ubuntu-22.04-*-unknown-linux-gnu/*.deb
+              noble,nightly,\"amd64,arm64\",false,debs/nightly-ubuntu-24.04-*-unknown-linux-gnu/*.deb
+              bookworm,stable,\"amd64,arm64\",false,debs/stable-debian-12-*-unknown-linux-gnu/*.deb
+              bookworm,nightly,\"amd64,arm64\",false,debs/nightly-debian-12-*-unknown-linux-gnu/*.deb
           gpg_private_key: "${{ secrets.GPG_PRIVATE_KEY }}"
           gpg_passphrase: "${{ secrets.PASSPHRASE }}"
 
@@ -67,20 +67,20 @@ jobs:
         prefix:
           - name: ubuntu
             repos: |
-              noble,stable,\"amd64,arm64\",debs/stable-ubuntu-24.04-*-unknown-linux-gnu/*.deb
-              jammy,stable,\"amd64,arm64\",debs/stable-ubuntu-22.04-*-unknown-linux-gnu/*.deb
-              noble,nightly,\"amd64,arm64\",debs/nightly-ubuntu-24.04-*-unknown-linux-gnu/*.deb
+              noble,stable,\"amd64,arm64\",false,debs/stable-ubuntu-24.04-*-unknown-linux-gnu/*.deb
+              jammy,stable,\"amd64,arm64\",false,debs/stable-ubuntu-22.04-*-unknown-linux-gnu/*.deb
+              noble,nightly,\"amd64,arm64\",false,debs/nightly-ubuntu-24.04-*-unknown-linux-gnu/*.deb
           - name: debian
             repos: |
-              bookworm,stable,\"amd64,arm64\",debs/stable-debian-12-*-unknown-linux-gnu/*.deb
-              bookworm,nightly,\"amd64,arm64\",debs/nightly-debian-12-*-unknown-linux-gnu/*.deb
+              bookworm,stable,\"amd64,arm64\",false,debs/stable-debian-12-*-unknown-linux-gnu/*.deb
+              bookworm,nightly,\"amd64,arm64\",false,debs/nightly-debian-12-*-unknown-linux-gnu/*.deb
       fail-fast: false
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Create repo
-        uses: jinnatar/actions-aptly-repo@v1
+        uses: jinnatar/actions-aptly-repo@v2
         with:
           name: kanidm-demo
           prefix: "${{ matrix.prefix.name }}"
@@ -101,7 +101,7 @@ jobs:
           cat kanidm_ppa.key >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
       - name: Create repo
-        uses: jinnatar/actions-aptly-repo@merge_extend
+        uses: jinnatar/actions-aptly-repo@v2
         with:
           name: kanidm-demo
           artifact_name: extended-repo-snapshot
@@ -124,7 +124,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Create repo
-        uses: jinnatar/actions-aptly-repo@merge_extend
+        uses: jinnatar/actions-aptly-repo@v2
         with:
           name: kanidm-demo
           artifact_name: ouroboros-repo-snapshot
@@ -149,7 +149,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Create repo
-        uses: jinnatar/actions-aptly-repo@gpg_export_name
+        uses: jinnatar/actions-aptly-repo@v2
         with:
           name: kanidm-demo
           artifact_name: ${{ format('key-export-snapshot-{0}', matrix.gpg_export_name) }}
@@ -158,19 +158,3 @@ jobs:
           gpg_private_key: "${{ secrets.GPG_PRIVATE_KEY }}"
           gpg_passphrase: "${{ secrets.PASSPHRASE }}"
           gpg_export_name: "${{ matrix.gpg_export_name }}"
-
-  create-key-export-demo-default:
-    name: Create key export default demo
-    runs-on: ubuntu-24.04
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Create repo
-        uses: jinnatar/actions-aptly-repo@gpg_export_name
-        with:
-          name: kanidm-demo
-          artifact_name: key-export-snapshot-defaults
-          repos: |
-            bookworm,stable,\"amd64,arm64\",false,debs/stable-debian-12-*-unknown-linux-gnu/*.deb
-          gpg_private_key: "${{ secrets.GPG_PRIVATE_KEY }}"
-          gpg_passphrase: "${{ secrets.PASSPHRASE }}"
