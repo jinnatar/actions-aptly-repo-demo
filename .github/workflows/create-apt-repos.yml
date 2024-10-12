@@ -152,6 +152,7 @@ jobs:
         uses: jinnatar/actions-aptly-repo@gpg_export_name
         with:
           name: kanidm-demo
+          artifact_name: ${{ format('key-export-snapshot-{0}', matrix.gpg_export_name) }}
           repos: |
             bookworm,stable,\"amd64,arm64\",false,debs/stable-debian-12-*-unknown-linux-gnu/*.deb
           gpg_private_key: "${{ secrets.GPG_PRIVATE_KEY }}"
@@ -168,6 +169,7 @@ jobs:
         uses: jinnatar/actions-aptly-repo@gpg_export_name
         with:
           name: kanidm-demo
+          artifact_name: key-export-snapshot-defaults
           repos: |
             bookworm,stable,\"amd64,arm64\",false,debs/stable-debian-12-*-unknown-linux-gnu/*.deb
           gpg_private_key: "${{ secrets.GPG_PRIVATE_KEY }}"
