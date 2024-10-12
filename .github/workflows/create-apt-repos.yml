@@ -137,3 +137,23 @@ jobs:
             bookworm,nightly,\"amd64,arm64\",false,debs/nightly-debian-12-*-unknown-linux-gnu/*.deb
           gpg_private_key: "${{ secrets.GPG_PRIVATE_KEY }}"
           gpg_passphrase: "${{ secrets.PASSPHRASE }}"
+
+  create-key-export-demos:
+    name: Create key export demos
+    strategy:
+      matrix:
+        gpg_export_name: ["repo.asc", "repo.gpg", ""]
+      fail-fast: false
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Create repo
+        uses: jinnatar/actions-aptly-repo@gpg_export_name
+        with:
+          name: kanidm-demo
+          repos: |
+            bookworm,stable,\"amd64,arm64\",false,debs/stable-debian-12-*-unknown-linux-gnu/*.deb
+          gpg_private_key: "${{ secrets.GPG_PRIVATE_KEY }}"
+          gpg_passphrase: "${{ secrets.PASSPHRASE }}"
+          gpg_export_name: "${{ matrix.gpg_export_name }}"
