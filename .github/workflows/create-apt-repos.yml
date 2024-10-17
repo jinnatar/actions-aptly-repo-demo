@@ -16,7 +16,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Create repo
-        uses: jinnatar/actions-aptly-repo@v2
+        uses: jinnatar/actions-aptly-repo@fix_1
         with:
           name: demo
           artifact_name: unsigned-repo
@@ -24,6 +24,10 @@ jobs:
           repos: |
               noble,stable,\"amd64,arm64\",false,debs/stable-ubuntu-24.04-*-unknown-linux-gnu/*.deb
               bookworm,stable,\"amd64,arm64\",false,debs/stable-debian-12-*-unknown-linux-gnu/*.deb
+      - name: Check repo.list
+        shell: bash
+        run: |
+          cat demo.list
   create-unsigned-accident:
     name: Create an unsigned dev repo by mistake
     runs-on: ubuntu-24.04
@@ -149,7 +153,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Create repo
-        uses: jinnatar/actions-aptly-repo@v2
+        uses: jinnatar/actions-aptly-repo@fix_1
         with:
           name: kanidm-demo
           artifact_name: ${{ format('key-export-snapshot-{0}', matrix.gpg_export_name) }}
@@ -158,3 +162,7 @@ jobs:
           gpg_private_key: "${{ secrets.GPG_PRIVATE_KEY }}"
           gpg_passphrase: "${{ secrets.PASSPHRASE }}"
           gpg_export_name: "${{ matrix.gpg_export_name }}"
+      - name: Check repo.list
+        shell: bash
+        run: |
+          cat kanidm-demo.list
