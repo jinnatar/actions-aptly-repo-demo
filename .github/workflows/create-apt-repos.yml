@@ -156,6 +156,7 @@ jobs:
         uses: jinnatar/actions-aptly-repo@fix_1
         with:
           name: kanidm-demo
+          repo_url: https://repo.example.com
           artifact_name: ${{ format('key-export-snapshot-{0}', matrix.gpg_export_name) }}
           repos: |
             bookworm,stable,\"amd64,arm64\",false,debs/stable-debian-12-*-unknown-linux-gnu/*.deb
