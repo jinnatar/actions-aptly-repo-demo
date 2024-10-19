@@ -109,7 +109,7 @@ jobs:
         with:
           name: kanidm-demo
           artifact_name: extended-repo-snapshot
-          repo_url: https://s3.nocturnal.fi/kanidm
+          repo_url: https://kanidm.github.io/kanidm_ppa
           repos: |
             noble,stable,\"amd64,arm64\",true,debs/stable-ubuntu-24.04-*-unknown-linux-gnu/*.deb
             jammy,stable,\"amd64,arm64\",true,debs/stable-ubuntu-22.04-*-unknown-linux-gnu/*.deb
@@ -121,7 +121,8 @@ jobs:
           import_gpg_key: "${{ steps.get_import_key.outputs.gpg_public_key }}"
   ourobouros-demo-repo:
     # This is a silly demo of the previous extended repo eating itself as an import.
-    # The point is to prove that a CI run that doesn't change anything, "works".
+    # The point is to prove that a CI run that doesn't change anything, "works",
+    # and just an import without new packages does as well.
     name: Extend an existing extended repo
     runs-on: ubuntu-24.04
     steps:
@@ -132,10 +133,10 @@ jobs:
         with:
           name: kanidm-demo
           artifact_name: ouroboros-repo-snapshot
-          repo_url: https://s3.nocturnal.fi/kanidm-extended
+          repo_url: https://kanidm.github.io/kanidm_ppa
           repos: |
-            noble,stable,\"amd64,arm64\",true,debs/stable-ubuntu-24.04-*-unknown-linux-gnu/*.deb
-            jammy,stable,\"amd64,arm64\",true,debs/stable-ubuntu-22.04-*-unknown-linux-gnu/*.deb
+            noble,stable,\"amd64,arm64\",true,no-debs
+            jammy,stable,\"amd64,arm64\",true,no-debs
             noble,nightly,\"amd64,arm64\",false,debs/nightly-ubuntu-24.04-*-unknown-linux-gnu/*.deb
             bookworm,stable,\"amd64,arm64\",true,debs/stable-debian-12-*-unknown-linux-gnu/*.deb
             bookworm,nightly,\"amd64,arm64\",false,debs/nightly-debian-12-*-unknown-linux-gnu/*.deb
@@ -153,7 +154,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Create repo
-        uses: jinnatar/actions-aptly-repo@fix_1
+        uses: jinnatar/actions-aptly-repo@v2
         with:
           name: kanidm-demo
           repo_url: https://repo.example.com
