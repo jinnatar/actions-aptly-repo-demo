@@ -91,6 +91,7 @@ jobs:
           repos: "${{ matrix.prefix.repos }}"
           gpg_private_key: "${{ secrets.GPG_PRIVATE_KEY }}"
           gpg_passphrase: "${{ secrets.PASSPHRASE }}"
+  # Demo extending a repository, some we don't extend and only carry as-is but resigned
   extend-demo-repo:
     name: Extend an existing repo
     runs-on: ubuntu-24.04
@@ -111,30 +112,6 @@ jobs:
           artifact_name: extended-repo-snapshot
           repo_url: https://kanidm.github.io/kanidm_ppa
           repos: |
-            noble,stable,\"amd64,arm64\",true,debs/stable-ubuntu-24.04-*-unknown-linux-gnu/*.deb
-            jammy,stable,\"amd64,arm64\",true,debs/stable-ubuntu-22.04-*-unknown-linux-gnu/*.deb
-            noble,nightly,\"amd64,arm64\",false,debs/nightly-ubuntu-24.04-*-unknown-linux-gnu/*.deb
-            bookworm,stable,\"amd64,arm64\",true,debs/stable-debian-12-*-unknown-linux-gnu/*.deb
-            bookworm,nightly,\"amd64,arm64\",false,debs/nightly-debian-12-*-unknown-linux-gnu/*.deb
-          gpg_private_key: "${{ secrets.GPG_PRIVATE_KEY }}"
-          gpg_passphrase: "${{ secrets.PASSPHRASE }}"
-          import_gpg_key: "${{ steps.get_import_key.outputs.gpg_public_key }}"
-  ourobouros-demo-repo:
-    # This is a silly demo of the previous extended repo eating itself as an import.
-    # The point is to prove that a CI run that doesn't change anything, "works",
-    # and just an import without new packages does as well.
-    name: Extend an existing extended repo
-    runs-on: ubuntu-24.04
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Create repo
-        uses: jinnatar/actions-aptly-repo@v2
-        with:
-          name: kanidm-demo
-          artifact_name: ouroboros-repo-snapshot
-          repo_url: https://kanidm.github.io/kanidm_ppa
-          repos: |
             noble,stable,\"amd64,arm64\",true,no-debs
             jammy,stable,\"amd64,arm64\",true,no-debs
             noble,nightly,\"amd64,arm64\",false,debs/nightly-ubuntu-24.04-*-unknown-linux-gnu/*.deb
@@ -142,6 +119,7 @@ jobs:
             bookworm,nightly,\"amd64,arm64\",false,debs/nightly-debian-12-*-unknown-linux-gnu/*.deb
           gpg_private_key: "${{ secrets.GPG_PRIVATE_KEY }}"
           gpg_passphrase: "${{ secrets.PASSPHRASE }}"
+          import_gpg_key: "${{ steps.get_import_key.outputs.gpg_public_key }}"
 
   create-key-export-demos:
     name: Create key export demos
