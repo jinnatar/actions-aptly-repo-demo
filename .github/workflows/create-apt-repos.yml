@@ -106,7 +106,7 @@ jobs:
           cat kanidm_ppa.key >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
       - name: Create repo
-        uses: jinnatar/actions-aptly-repo@v2
+        uses: jinnatar/actions-aptly-repo@fix_2
         with:
           name: kanidm-demo
           artifact_name: extended-repo-snapshot
